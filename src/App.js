@@ -1,8 +1,9 @@
-import CardList from './components/card-list/card-list.component';
-
 import { Component } from 'react';
 import './App.css';
+
+import CardList from './components/card-list/card-list.component';
 import SearchBox from './components/search-box/search-box.component';
+
 
 
 //continue on video #
@@ -69,6 +70,7 @@ render(){
   // 2. render the page
   return (
     <div className="App">
+      <h1 className='appTitle' >Monsters Rolodex </h1>
 
       <SearchBox  
       className = {"search-box"}

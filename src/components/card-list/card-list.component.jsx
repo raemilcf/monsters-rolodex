@@ -1,20 +1,21 @@
 import { Component } from "react";
+import './card-list.styles.css'
+
+import Card from "./card/card.component";
+
+
 
 
 class CardList extends Component{
     //constructor is running under the hood 
-
-
     render(){
         //whenever props change it will re-render the app
         const {monsters} = this.props;
         return (
-            <div>
-                {
-                    monsters.map((monster)=> {  //use of map to iterate our array of monsters 
-                        return  <h1 key={monster.id}>{monster.name}</h1> ;
-                    })
-                }
+            <div className="card-list">
+                {monsters.map((monster)=>   
+                     <Card key={monster.id}  id={ monster.id} name= {monster.name} email= {monster.email} />
+                )}
             </div>
         )
     }

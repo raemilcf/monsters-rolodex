@@ -1,12 +1,10 @@
 import { Component } from "react";
+import './search-box.styles.css'
 
 class SearchBox extends Component{
 
 
     render(){
-
-        //const {onSearchChange} = this.props;
-
         return(
             <input  //ge the value of the input on the onchange with the callback event 
                 className={this.props.className} 
