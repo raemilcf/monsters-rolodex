@@ -1,4 +1,4 @@
-import { Component, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 import CardList from './components/card-list/card-list.component';
@@ -13,17 +13,39 @@ import SearchBox from './components/search-box/search-box.component';
 //when hooks changes 
 //state changes 
 
+//don't make request in the functional component it will cause a infinite re-render
 const App = () => {
-  console.log('render');
 
   const [searchField, setSearchField] = useState(''); //[value , setValue] hooks usestate hooks
-  console.log(searchField);
+  const [monsters, setMonsters] = useState([]);
+  const [filteredMonsters, setFilteredMonsters] = useState(monsters);
+  const [stringField, setStringField ] = useState('');
 
   const onSearchChange = (event)=> {
         const searchFieldString = event.target.value.toLowerCase();
         setSearchField(searchFieldString);
   }
-     
+  
+  const onStringChange = (event) => { //will re-filter throw our arrays
+    setStringField(event.target.value);
+  }
+
+      useEffect(()=> { //gonna run the first time when app is mount 
+        fetch('https://jsonplaceholder.typicode.com/users')
+        .then(response=>   response.json() )
+        .then((users)=>  setMonsters(users)
+        );
+      }, []); //prop values or useState //gonna re-render when values in array dependency change 
+      //we send the array dependency empty because we only want to run the fetch once 
+
+      useEffect(() => {
+        const newfilteredListMonsters = monsters.filter((monster) =>  {
+          return monster.name.toLowerCase().includes(searchField);
+        });
+        //actualizar useState de monsters 
+        setFilteredMonsters(newfilteredListMonsters);
+      },[monsters, searchField]); //only change when monsters or searchfield changes 
+      
 
   return(
     <div className="App">
@@ -32,9 +54,14 @@ const App = () => {
        <SearchBox  
        className = {"search-box"}
        placeholder = {"search monsters" }
-       onChangeHandler = {onSearchChange} />      
+       onChangeHandler = {onSearchChange} />   
 
-       {/* <CardList monsters= {filteredListMonsters}/> */}
+      <SearchBox  
+       className = {"search-box"}
+       placeholder = {"set String" }
+       onChangeHandler = {onStringChange} />      
+
+       <CardList monsters= {filteredMonsters}/>
      </div>
    
   )
