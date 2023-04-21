@@ -17,19 +17,20 @@ import SearchBox from './components/search-box/search-box.component';
 const App = () => {
 
   const [searchField, setSearchField] = useState(''); //[value , setValue] hooks usestate hooks
+  const [title, setTitle] = useState('');
   const [monsters, setMonsters] = useState([]);
   const [filteredMonsters, setFilteredMonsters] = useState(monsters);
-  const [stringField, setStringField ] = useState('');
 
   const onSearchChange = (event)=> {
         const searchFieldString = event.target.value.toLowerCase();
         setSearchField(searchFieldString);
   }
-  
-  const onStringChange = (event) => { //will re-filter throw our arrays
-    setStringField(event.target.value);
-  }
+  const onTitleChange = (event)=> {
+    const searchFieldString = event.target.value;
+    setTitle(searchFieldString);
+}
 
+ 
       useEffect(()=> { //gonna run the first time when app is mount 
         fetch('https://jsonplaceholder.typicode.com/users')
         .then(response=>   response.json() )
@@ -49,23 +50,29 @@ const App = () => {
 
   return(
     <div className="App">
-       <h1 className='appTitle' >Monsters Rolodex </h1>
+       <h1 className='appTitle' >{title} </h1>
 
        <SearchBox  
        className = {"search-box"}
        placeholder = {"search monsters" }
        onChangeHandler = {onSearchChange} />   
+       <br />
 
       <SearchBox  
        className = {"search-box"}
-       placeholder = {"set String" }
-       onChangeHandler = {onStringChange} />      
+       placeholder = {"change Title" }
+       onChangeHandler = {onTitleChange} />   
 
        <CardList monsters= {filteredMonsters}/>
+
      </div>
    
   )
 }
+
+//reflow - shift page to make fit the new h1 or html target
+//add or remove title - we should expect to reflow the page 
+//component are mounted or unmounted we will expect to reflow 
 
 //pure, impure functions and side effects 
 

@@ -1,4 +1,3 @@
-import { Component, useState } from "react";
 import './card-list.styles.css'
 
 import Card from "./card/card.component";
@@ -13,7 +12,7 @@ const CardList = ({ monsters }) => ( //implicit descomposition of props
     )}
     </div> 
 );
-        
+
 
 // class CardList extends Component{
 //     //constructor is running under the hood 
