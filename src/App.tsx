@@ -1,9 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState , ChangeEvent} from 'react';
 import './App.css';
 
 import CardList from './components/card-list/card-list.component';
 import SearchBox from './components/search-box/search-box.component';
+import { getData } from './util/data.util';
 
+
+//with typescript create typed interface or util function 
+export type Monster = {
+  id: string; 
+  name : string;
+  email: string;
+}
 //functional component --> looks like the same render 
 
 //class constructor 
@@ -17,25 +25,28 @@ import SearchBox from './components/search-box/search-box.component';
 const App = () => {
 
   const [searchField, setSearchField] = useState(''); //[value , setValue] hooks usestate hooks
-  const [title, setTitle] = useState('');
-  const [monsters, setMonsters] = useState([]);
+  const [monsters, setMonsters] = useState<Monster[]>([]);
   const [filteredMonsters, setFilteredMonsters] = useState(monsters);
 
-  const onSearchChange = (event)=> {
+  //typescript functions add parameters type and return type
+  const onSearchChange = (event: ChangeEvent<HTMLInputElement>) : void => {
         const searchFieldString = event.target.value.toLowerCase();
         setSearchField(searchFieldString);
   }
-  const onTitleChange = (event)=> {
-    const searchFieldString = event.target.value;
-    setTitle(searchFieldString);
-}
-
  
+
+ //change the fetch response 
       useEffect(()=> { //gonna run the first time when app is mount 
-        fetch('https://jsonplaceholder.typicode.com/users')
-        .then(response=>   response.json() )
-        .then((users)=>  setMonsters(users)
-        );
+        // fetch('https://jsonplaceholder.typicode.com/users')
+        // .then(response=>   response.json() )
+        // .then((users)=>  setMonsters(users)
+        const fetchUsers = async () => {
+          //get data will return array of monsters
+          const users = await getData<Monster[]>('https://jsonplaceholder.typicode.com/users');
+          setMonsters(users);
+        };
+        
+        fetchUsers();
       }, []); //prop values or useState //gonna re-render when values in array dependency change 
       //we send the array dependency empty because we only want to run the fetch once 
 
@@ -50,21 +61,14 @@ const App = () => {
 
   return(
     <div className="App">
-       <h1 className='appTitle' >{title} </h1>
+       <h1 className='appTitle' >Monster Rolodex</h1>
 
        <SearchBox  
        className = {"search-box"}
        placeholder = {"search monsters" }
        onChangeHandler = {onSearchChange} />   
        <br />
-
-      <SearchBox  
-       className = {"search-box"}
-       placeholder = {"change Title" }
-       onChangeHandler = {onTitleChange} />   
-
        <CardList monsters= {filteredMonsters}/>
-
      </div>
    
   )
